@@ -77,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+//export default App;
