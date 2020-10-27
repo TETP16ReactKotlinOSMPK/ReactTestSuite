@@ -15,6 +15,7 @@ import {
   View,
   Text,
   StatusBar,
+  Button,
 } from 'react-native';
 
 import {
@@ -25,25 +26,17 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const App: () => React$Node = () => {
-  return (
-    <>
-    <View style={styles.container}>
+// const App = () => {
+//   return (
+//     <View style={styles.container}>
+//       <Button
+//       onPress={testScenarioOne}
+//       title="Test scenario one"
+//       />
+//     </View>
+//   );
+// };
 
-      <RNCamera
-        ref={ref => {
-        this.camera = ref;
-      }}
-      style={{
-        flex: 1,
-        width: '100%',
-      }}
-      >
-      </RNCamera>
-    </View>
-    </>
-  );
-};
 
 const styles = StyleSheet.create({
   scrollView: {
