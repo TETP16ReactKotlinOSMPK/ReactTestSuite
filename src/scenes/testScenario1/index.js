@@ -1,5 +1,6 @@
 import React from 'react';
 import {SafeAreaView, Text, TouchableHighlight, TouchableOpacity, View, StyleSheet} from 'react-native';
+import GetLocation from 'react-native-get-location';
 import { RNCamera } from 'react-native-camera';
 
 const TestScenario1Screen = ({navigation}) => (
@@ -37,6 +38,19 @@ const TestScenario1Screen = ({navigation}) => (
 
 takePicture = async () => {
     if (this.camera) {
+      // Get gps location
+      GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout:  1500,
+      })
+      .then(location => {
+        console.log(location);
+      })
+      .catch(error => {
+        const { code, message} = error;
+        console.warn(code, message);
+      })
+      // Take picture
       const options = { quality: 0.5, base64: true };
       const data = await this.camera.takePictureAsync(options);
       console.log(data.uri);
