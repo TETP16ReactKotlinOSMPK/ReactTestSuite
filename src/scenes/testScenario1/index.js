@@ -1,12 +1,21 @@
 import React from 'react';
-import {SafeAreaView, Text, TouchableHighlight, TouchableOpacity, View, StyleSheet} from 'react-native';
+import {
+  SafeAreaView,
+  Text,
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+} from 'react-native';
 import GetLocation from 'react-native-get-location';
-import { RNCamera } from 'react-native-camera';
+import {RNCamera} from 'react-native-camera';
+
+const apiKey = '0a39e670ebc117a265e000dd2f5ef474';
 
 const TestScenario1Screen = ({navigation}) => (
-    <View style={styles.container}>
+  <View style={styles.container}>
     <RNCamera
-      ref={ref => {
+      ref={(ref) => {
         this.camera = ref;
       }}
       style={styles.preview}
@@ -24,59 +33,79 @@ const TestScenario1Screen = ({navigation}) => (
         buttonPositive: 'Ok',
         buttonNegative: 'Cancel',
       }}
-      onGoogleVisionBarcodesDetected={({ barcodes }) => {
+      onGoogleVisionBarcodesDetected={({barcodes}) => {
         console.log(barcodes);
       }}
     />
-    <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-      <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
-        <Text style={{ fontSize: 14 }}> SNAP </Text>
+    <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center'}}>
+      <TouchableOpacity
+        onPress={this.takePicture.bind(this)}
+        style={styles.capture}>
+        <Text style={{fontSize: 14}}> SNAP </Text>
       </TouchableOpacity>
     </View>
   </View>
 );
 
 takePicture = async () => {
-    if (this.camera) {
-      // Get gps location
-      GetLocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout:  1500,
-      })
-      .then(location => {
+  if (this.camera) {
+    // Get gps location
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 1500,
+    })
+      .then((location) => {
         console.log(location);
+        // get weather from coordinates
+        const getWeatherFromApiAsync = async () => {
+          try {
+            let response = await fetch(
+              `https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=${apiKey}`,
+            );
+            let json = await response.json();
+            const weatherArray = json.weather;
+            const weather = weatherArray[0].main;
+            const city = json.name;
+            console.log(weather);
+            console.log(city);
+          } catch (error) {
+            console.error(error);
+          }
+        };
+        getWeatherFromApiAsync();
       })
-      .catch(error => {
-        const { code, message} = error;
+      .catch((error) => {
+        const {code, message} = error;
         console.warn(code, message);
-      })
-      // Take picture
-      const options = { quality: 0.5, base64: true };
-      const data = await this.camera.takePictureAsync(options);
-      console.log(data.uri);
-    }
-  };
+      });
+
+    // Take picture
+    const options = {quality: 0.5, base64: true};
+    const data = await this.camera.takePictureAsync(options);
+    console.log(data.uri);
+  }
+};
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      flexDirection: 'column',
-      backgroundColor: 'black',
-    },
-    preview: {
-      flex: 1,
-      justifyContent: 'flex-end',
-      alignItems: 'center',
-    },
-    capture: {
-      flex: 0,
-      backgroundColor: '#fff',
-      borderRadius: 5,
-      padding: 15,
-      paddingHorizontal: 20,
-      alignSelf: 'center',
-      margin: 20,
-    },
-  });
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: 'black',
+  },
+  preview: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  capture: {
+    flex: 0,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    padding: 15,
+    paddingHorizontal: 20,
+    alignSelf: 'center',
+    margin: 20,
+  },
+});
 
 export default TestScenario1Screen;
