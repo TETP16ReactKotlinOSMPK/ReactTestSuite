@@ -57,7 +57,7 @@ takePicture = async () => {
       .then((location) => {
         console.log(location);
         // get weather from coordinates
-        const getWeatherFromApiAsync = async () => {
+        getWeatherFromApiAsync = async () => {
           try {
             let response = await fetch(
               `https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=${apiKey}`,
@@ -72,7 +72,6 @@ takePicture = async () => {
             console.error(error);
           }
         };
-        getWeatherFromApiAsync();
       })
       .catch((error) => {
         const {code, message} = error;
