@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "121801383946",
+    "firebase_url": "https://reacttestsuitedb.firebaseio.com",
+    "project_id": "reacttestsuitedb",
+    "storage_bucket": "reacttestsuitedb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121801383946:android:f02e50f0eb91789c31bff3",
+        "android_client_info": {
+          "package_name": "com.reacttestsuite"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121801383946-6mp4ko6p51o8ab4h2nt0tff67cboo5ie.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9Nek8bd92K4H9pQ3N03F1wmYKNujZURY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "121801383946-6mp4ko6p51o8ab4h2nt0tff67cboo5ie.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

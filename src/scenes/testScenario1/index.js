@@ -9,8 +9,12 @@ import {
 } from 'react-native';
 import GetLocation from 'react-native-get-location';
 import {RNCamera} from 'react-native-camera';
+import firestore from '@react-native-firebase/firestore';
 
+// API key
 const apiKey = '0a39e670ebc117a265e000dd2f5ef474';
+
+// database reference
 
 const TestScenario1Screen = ({navigation}) => (
   <View style={styles.container}>
@@ -48,6 +52,11 @@ const TestScenario1Screen = ({navigation}) => (
 );
 
 takePicture = async () => {
+  let cityValue;
+  let weatherValue;
+  let latitudeValue;
+  let longitudeValue;
+
   if (this.camera) {
     // Get gps location
     GetLocation.getCurrentPosition({
@@ -56,7 +65,7 @@ takePicture = async () => {
     })
       .then((location) => {
         console.log(location);
-        // get weather from coordinates
+        // get weather from coordinates async
         getWeatherFromApiAsync = async () => {
           try {
             let response = await fetch(
@@ -68,6 +77,11 @@ takePicture = async () => {
             const city = json.name;
             console.log(weather);
             console.log(city);
+            console.log('what');
+            cityValue = city;
+            weatherValue = weather;
+            latitudeValue = location.latitude;
+            longitudeValue = location.longitude;
           } catch (error) {
             console.error(error);
           }
@@ -81,6 +95,20 @@ takePicture = async () => {
     // Take picture
     const options = {quality: 0.5, base64: true};
     const data = await this.camera.takePictureAsync(options);
+    firestore()
+      .collection('photos')
+      .add({
+        city: cityValue,
+        latitude: latitudeValue,
+        longitude: longitudeValue,
+        photo: data.uri,
+        weather: weatherValue,
+      })
+      .then(() => {
+        console.log('Photo added!');
+      })
+      .catch((error) => console.log(error));
+
     console.log(data.uri);
   }
 };
