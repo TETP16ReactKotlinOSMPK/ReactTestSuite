@@ -10,6 +10,8 @@ import {
 import GetLocation from 'react-native-get-location';
 import {RNCamera} from 'react-native-camera';
 import firestore from '@react-native-firebase/firestore';
+//import Sound from 'react-native-sound';
+var Sound = require('react-native-sound');
 
 // API key
 const apiKey = '0a39e670ebc117a265e000dd2f5ef474';
@@ -55,6 +57,8 @@ const TestScenario1Screen = ({navigation}) => (
   </View>
 );
 
+startAudioPlayback();
+
 takePicture = async () => {
   if (this.camera) {
     // Get gps location
@@ -94,6 +98,25 @@ takePicture = async () => {
     console.log(data.uri);
   }
 };
+
+function startAudioPlayback() {
+  Sound.setCategory('Playback');
+  var mp3File = new Sound('furelise.mp3', Sound.MAIN_BUNDLE, (error) => {
+    if (error) {
+      console.log('failed to load the sound', error);
+      return;
+    }
+    console.log('sound loaded successfully');
+
+    mp3File.play((success) => {
+      if (success) {
+        console.log('successfully finished playing');
+      } else {
+        console.log('playback failed');
+      }
+    });
+  });
+}
 
 const getWeatherFromApiAsync = async (location) => {
   try {
