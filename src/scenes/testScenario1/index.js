@@ -52,26 +52,11 @@ takePicture = async () => {
     // Get gps location
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
-      timeout: 1500,
+      timeout: 15000,
     })
       .then((location) => {
-        console.log(location);
         // get weather from coordinates
-        getWeatherFromApiAsync = async () => {
-          try {
-            let response = await fetch(
-              `https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=${apiKey}`,
-            );
-            let json = await response.json();
-            const weatherArray = json.weather;
-            const weather = weatherArray[0].main;
-            const city = json.name;
-            console.log(weather);
-            console.log(city);
-          } catch (error) {
-            console.error(error);
-          }
-        };
+        getWeatherFromApiAsync(location);
       })
       .catch((error) => {
         const {code, message} = error;
@@ -81,7 +66,24 @@ takePicture = async () => {
     // Take picture
     const options = {quality: 0.5, base64: true};
     const data = await this.camera.takePictureAsync(options);
+
     console.log(data.uri);
+  }
+};
+
+const getWeatherFromApiAsync = async (location) => {
+  try {
+    let response = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=${apiKey}`,
+    );
+    let json = await response.json();
+    const weatherArray = json.weather;
+    const weather = weatherArray[0].main;
+    const city = json.name;
+    console.log(weather);
+    console.log(city);
+  } catch (error) {
+    console.error(error);
   }
 };
 
