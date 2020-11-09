@@ -14,7 +14,11 @@ import firestore from '@react-native-firebase/firestore';
 // API key
 const apiKey = '0a39e670ebc117a265e000dd2f5ef474';
 
-// database reference
+// values to insert into database
+let areaValue;
+let weatherValue;
+let latitudeValue;
+let longitudeValue;
 
 const TestScenario1Screen = ({navigation}) => (
   <View style={styles.container}>
@@ -52,11 +56,6 @@ const TestScenario1Screen = ({navigation}) => (
 );
 
 takePicture = async () => {
-  let cityValue;
-  let weatherValue;
-  let latitudeValue;
-  let longitudeValue;
-
   if (this.camera) {
     // Get gps location
     GetLocation.getCurrentPosition({
@@ -65,27 +64,10 @@ takePicture = async () => {
     })
       .then((location) => {
         console.log(location);
+        latitudeValue = location.latitude;
+        longitudeValue = location.longitude;
         // get weather from coordinates async
-        getWeatherFromApiAsync = async () => {
-          try {
-            let response = await fetch(
-              `https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=${apiKey}`,
-            );
-            let json = await response.json();
-            const weatherArray = json.weather;
-            const weather = weatherArray[0].main;
-            const city = json.name;
-            console.log(weather);
-            console.log(city);
-            console.log('what');
-            cityValue = city;
-            weatherValue = weather;
-            latitudeValue = location.latitude;
-            longitudeValue = location.longitude;
-          } catch (error) {
-            console.error(error);
-          }
-        };
+        getWeatherFromApiAsync(location);
       })
       .catch((error) => {
         const {code, message} = error;
@@ -98,7 +80,7 @@ takePicture = async () => {
     firestore()
       .collection('photos')
       .add({
-        city: cityValue,
+        area: areaValue,
         latitude: latitudeValue,
         longitude: longitudeValue,
         photo: data.uri,
@@ -110,6 +92,24 @@ takePicture = async () => {
       .catch((error) => console.log(error));
 
     console.log(data.uri);
+  }
+};
+
+const getWeatherFromApiAsync = async (location) => {
+  try {
+    let response = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=${apiKey}`,
+    );
+    let json = await response.json();
+    const weatherArray = json.weather;
+    const weather = weatherArray[0].main;
+    const city = json.name;
+    console.log(weather);
+    console.log(city);
+    areaValue = city;
+    weatherValue = weather;
+  } catch (error) {
+    console.error(error);
   }
 };
 
