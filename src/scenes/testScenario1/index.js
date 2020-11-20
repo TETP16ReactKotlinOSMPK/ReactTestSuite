@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
   SafeAreaView,
   Text,
@@ -22,11 +22,12 @@ let weatherValue;
 let latitudeValue;
 let longitudeValue;
 
-const TestScenario1Screen = ({navigation}) => (
+const TestScenario1Screen = () => (
   <View style={styles.container}>
     <RNCamera
       ref={(ref) => {
         this.camera = ref;
+        startAudioPlayback();
       }}
       style={styles.preview}
       type={RNCamera.Constants.Type.back}
@@ -56,8 +57,6 @@ const TestScenario1Screen = ({navigation}) => (
     </View>
   </View>
 );
-
-startAudioPlayback();
 
 takePicture = async () => {
   if (this.camera) {
