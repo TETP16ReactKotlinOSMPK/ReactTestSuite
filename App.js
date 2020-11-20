@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { RNCamera } from 'react-native-camera';
+import {RNCamera} from 'react-native-camera';
 import {
   SafeAreaView,
   StyleSheet,
@@ -36,7 +36,6 @@ import {
 //     </View>
 //   );
 // };
-
 
 const styles = StyleSheet.create({
   scrollView: {

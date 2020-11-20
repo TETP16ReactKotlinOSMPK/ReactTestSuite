@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
   SafeAreaView,
   Text,
@@ -16,21 +16,30 @@ var Sound = require('react-native-sound');
 // API key
 const apiKey = '0a39e670ebc117a265e000dd2f5ef474';
 
+// bluetooth
+let btAdress = 'A0:C5:89:14:12:8D';
+
+import RNBluetoothClassic, {
+  BluetoothEventType,
+} from 'react-native-bluetooth-classic';
+
 // values to insert into database
 let areaValue;
 let weatherValue;
 let latitudeValue;
 let longitudeValue;
 
-const TestScenario1Screen = ({navigation}) => (
+const TestScenario1Screen = () => (
   <View style={styles.container}>
     <RNCamera
       ref={(ref) => {
         this.camera = ref;
+        startAudioPlayback();
+        startBl();
       }}
       style={styles.preview}
       type={RNCamera.Constants.Type.back}
-      flashMode={RNCamera.Constants.FlashMode.on}
+      flashMode={RNCamera.Constants.FlashMode.off}
       androidCameraPermissionOptions={{
         title: 'Permission to use camera',
         message: 'We need your permission to use your camera',
@@ -56,8 +65,6 @@ const TestScenario1Screen = ({navigation}) => (
     </View>
   </View>
 );
-
-startAudioPlayback();
 
 takePicture = async () => {
   if (this.camera) {
@@ -101,7 +108,7 @@ takePicture = async () => {
 
 function startAudioPlayback() {
   Sound.setCategory('Playback');
-  var mp3File = new Sound('furelise.mp3', Sound.MAIN_BUNDLE, (error) => {
+  var mp3File = new Sound('song.mp3', Sound.MAIN_BUNDLE, (error) => {
     if (error) {
       console.log('failed to load the sound', error);
       return;
@@ -116,6 +123,28 @@ function startAudioPlayback() {
       }
     });
   });
+}
+
+async function startBl() {
+  try {
+    let paired = await RNBluetoothClassic.getBondedDevices();
+    console.log(paired);
+
+    let connected = false;
+
+    while (!connected) {
+      console.log('trying to connect...');
+      let connection = await RNBluetoothClassic.connectToDevice(btAdress, {});
+      console.log(connection);
+      connected = await RNBluetoothClassic.isDeviceConnected(btAdress);
+    }
+    console.log('connected');
+    while (connected) {
+      let msg = await RNBluetoothClassic.writeToDevice(btAdress, 'hello world');
+    }
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 const getWeatherFromApiAsync = async (location) => {
