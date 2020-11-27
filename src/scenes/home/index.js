@@ -18,6 +18,18 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import {BleManager} from 'react-native-ble-plx';
+
+// class bl {
+//   constructor() {
+//     this.manager = new BleManager();
+//   }
+// }
+
+// const blManager = new bl();
+
+// device.name === 'ACTON II'
+
 const HomeScreen = ({navigation}) => (
   <SafeAreaView>
     <Text style={styles.sectionTitle}>Screen : Home</Text>
@@ -27,6 +39,46 @@ const HomeScreen = ({navigation}) => (
     </TouchableHighlight>
   </SafeAreaView>
 );
+
+scanAndConnect();
+
+function scanAndConnect() {
+  const manager = new BleManager();
+  console.log('function working');
+  manager.startDeviceScan(null, null, (error, device) => {
+    console.log('scanning..');
+    if (error) {
+      // Handle error (scanning will be stopped automatically)
+      console.log(error);
+      return;
+    }
+    console.log(device.name);
+    // Check if it is a device you are looking for based on advertisement data
+    // or other criteria.
+    if (device.name === 'ACTON II') {
+      // Stop scanning as it's not necessary if you are scanning for one device.
+      console.log('found device');
+      manager.stopDeviceScan();
+
+      device
+        .connect()
+        .then((device) => {
+          console.log('connected');
+          console.log(device);
+          return device.discoverAllServicesAndCharacteristics();
+        })
+        .then((device) => {
+          // Do work on device with services and characteristics
+          return device.characteristicsForService();
+        })
+        .catch((error) => {
+          // Handle errors
+          console.log(error);
+        });
+      // Proceed with connection.
+    }
+  });
+}
 
 const styles = StyleSheet.create({
   scrollView: {
