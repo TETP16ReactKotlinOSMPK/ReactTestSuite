@@ -41,7 +41,7 @@ const TestScenario1Screen = ({navigation}) => (
       <TouchableOpacity
         onPress={this.takePicture.bind(this)}
         style={styles.capture}>
-        <Text style={{fontSize: 14}}> SNAP </Text>
+        <Text style={{fontSize: 14}}> TAKE PHOTO </Text>
       </TouchableOpacity>
     </View>
   </View>
