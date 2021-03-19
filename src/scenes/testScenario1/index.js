@@ -10,7 +10,7 @@ import {
 import GetLocation from 'react-native-get-location';
 import {RNCamera} from 'react-native-camera';
 
-const apiKey = '0a39e670ebc117a265e000dd2f5ef474';
+const apiKey = 'xxxxx';
 
 const TestScenario1Screen = ({navigation}) => (
   <View style={styles.container}>
