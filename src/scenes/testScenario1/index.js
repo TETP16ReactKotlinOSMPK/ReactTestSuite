@@ -12,7 +12,7 @@ import {RNCamera} from 'react-native-camera';
 import firestore from '@react-native-firebase/firestore';
 
 // API key
-const apiKey = '0a39e670ebc117a265e000dd2f5ef474';
+const apiKey = 'xxxxx';
 
 // values to insert into database
 let areaValue;
