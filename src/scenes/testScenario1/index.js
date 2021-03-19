@@ -14,7 +14,7 @@ import firestore from '@react-native-firebase/firestore';
 var Sound = require('react-native-sound');
 
 // API key
-const apiKey = '0a39e670ebc117a265e000dd2f5ef474';
+const apiKey = 'xxxxxxx';
 
 // bluetooth
 let btAdress = 'A0:C5:89:14:12:8D';
